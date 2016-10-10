@@ -3,8 +3,12 @@
 # 2. 
 #
 #
-import sys, time, os
-###############################################################################
+import time, os
+def dscreaders(rlines):
+    with open("descriptions.txt") as f:
+        content = f.readlines()
+    
+        
 def gamestart(hero_name, level):
 
     print """\n\tWell hello there, %s. I've been waiting for you - watching you, for
@@ -38,30 +42,28 @@ This game is completely free of charge, unlike most Microsoft
 products. All proceeds will be generously donated to the Bill
 and Melinda Gates foundation.\n"""
     splashTime = 10
-    countTime = 1
     print "This splash will end in:   ",
     for i in range (0, splashTime):
         print str(splashTime),
         splashTime -= 1
         time.sleep(1)
         if i == 1:
-            level == 1
+            level += 1
     os.system('cls')
-###############################################################################
+
+    pass
 def prompter(level):
-    prompt_pass = []
-    prompt_pass.append(raw_input('\n>  ').split())
+    prompt_pass = (raw_input('\n>  ').split())
     
     if len(prompt_pass) == 1:
-        command = prompt_pass.pop()
+        command = prompt_pass[0]
     elif len(prompt_pass) == 2:
-        item = prompt_pass.pop()
-        command = prompt_pass.pop()
+        item = prompt_pass[1]
+        command = prompt_pass[0]
     else:
         prompter(level)
     
-    print prompt_pass[1]
-    print command
+    print prompt_pass
     
     if command == commands[0] or command == commands[1]:
         print "Commands:", commands
@@ -76,7 +78,6 @@ def prompter(level):
     else:
         print "I don't recognize that command, sorry."
         prompter(level)
-###############################################################################
 def survey(level):
     if level == 1:
         print """
@@ -90,28 +91,27 @@ def survey(level):
         """
     else:
         pass
-###############################################################################  
 def inspect(level, item):
     if level == 1:
         if item == "DESK":
             print """
-            The desk is cluttered with a few tattered papers on top. After you rummage
-            around it like a good detective, you find a KEY in one of the open drawers.
-            Under the desk you find a damaged picture of Bill Gates. The frame appears very
-            ornate and possible gold, but the glass is shattered. On top of the desk there
-            is a apparently (apparently because of the bullet holes in it) non functional
-            computer hooked up to a seemingly punched monitor.
+The desk is cluttered with a few tattered papers on top. After you rummage
+around it like a good detective, you find a KEY in one of the open drawers.
+Under the desk you find a damaged picture of Bill Gates. The frame appears very
+ornate and possible gold, but the glass is shattered. On top of the desk there
+is an apparently (apparently because of the bullet holes in it) non functional
+computer hooked up to a seemingly punched monitor.
             """
             prompter(1)
         elif item == "FIRES":
             pass
         elif item == "DOOR":
-            if dooropen == false:
-                print 'The door says "Staff Only" and is locked.'
-                prompter()
+            #if dooropen == false:
+            print 'The door says "Staff Only" and is locked.'
+            prompter()
             #elif open == true:
-            else:
-                pass
+            #else:
+                #pass
 ###############################################################################
       
 os.system('cls')
@@ -122,10 +122,10 @@ level = 1
 item = 0
 
 hero_name = raw_input("What is your name? > ")
-
+dscreaders(4)
 if level == 0:
     gamestart(hero_name, level)
     level += 1
     prompter(level)
 else:
-    prompter(level)
+    prompter(level)    
