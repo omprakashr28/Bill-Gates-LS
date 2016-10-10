@@ -61,6 +61,7 @@ def prompter(level):
         item = prompt_pass[1]
         command = prompt_pass[0]
     else:
+        print "I don't recognize that command, sorry."
         prompter(level)
     
     print prompt_pass
