@@ -113,7 +113,6 @@ computer hooked up to a seemingly punched monitor.
             #elif open == true:
             #else:
                 #pass
-###############################################################################
       
 os.system('cls')
 
