@@ -3,17 +3,9 @@
 # are assigned to the descriptions below the defs
 import time, os
 
-def dscreaders(rlines):
-    with open("descriptions.txt") as f:
-        content = f.readlines()
-    
-        
 def gamestart(hero_name, level):
 
-    print """\n\tWell hello there, %s. I've been waiting for you - watching you, for
-a while now %s. You may be wondering where this voice is coming from.
-I'm in your head %s. I have many names, some of them older than others.
-But I have a feeling that you may know me best as Bill Gates.""" % (hero_name,
+    print billgates1 % (hero_name,
         hero_name, hero_name)
 
     raw_input("\nWhat do you think of that? > ")
@@ -112,3 +104,9 @@ computer hooked up to a seemingly punched monitor.
             #elif open == true:
             #else:
                 #pass
+
+billgates1      =,
+"""\n\tWell hello there, %s. I've been waiting for you - watching you, for
+a while now %s. You may be wondering where this voice is coming from.
+I'm in your head %s. I have many names, some of them older than others.
+But I have a feeling that you may know me best as Bill Gates."""
