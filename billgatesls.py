@@ -4,8 +4,9 @@ from billgatesdef import *
 
 os.system('cls')
 
-floor = 1
-item = 0
+floor   =   0
+item    =   0
+health  =   10
 
 hero_name = raw_input("What is your name? > ")
 
