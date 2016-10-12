@@ -1,2 +1,11 @@
 # Bill-Gates-LS
-Bill Gates is Literally Satan in Bill Gates: Literally Satan
+
+Need to fix infinite inventory.
+
+Stuff to implement:
+  + enemies
+  + damage
+  + potions
+  + weapons
+  + inv screen
+      - With health displayed and prettier inv.
