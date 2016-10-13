@@ -1,37 +1,102 @@
-# Add definitions and descriptions.
-# Reove the descriptions and replace with variables that
-# are assigned to the descriptions below the defs
-
+# Adjust Start class timer values
+# 
+# 
 import time, os
 
-commands = ['help', 'h', 'survey', 's', 'look', 'l', 'grab', 'g', 'inv',
+commands    = ['help', 'h', 'survey', 's', 'look', 'l', 'grab', 'g', 'inv',
             'i']
 
-inventory = [] 
+inventory   = [] 
 
-def gamestart(hero_name, floor):
+enemyname = 'Desk Jockey'
 
-    # Opening Bill Gates dialouge. Will definitely be changed later.
-    print billgates1 % (hero_name,
-        hero_name, hero_name)
-
-    raw_input("\nWhat do you think of that? > ")
-
-    print "\nOkay then, if you want to do it the hard way."
-    print "\nWelcome to Hell %s." % hero_name
+class Start():
     
-    time.sleep(4) # Think about changing this.
-    os.system('cls')
+    def __init__(self):
+        
+        self.health = 10
+        self.attack = 2
 
-    # Splash stuff. May change splash time to 10 and adjust spacing.
-    print splash
-    splashTime = 10
-    print "This splash will end in: ",
-    for i in range (0, splashTime):
-        print str(splashTime) + ' ',
-        splashTime -= 1
-        time.sleep(1)
-    os.system('cls')
+        self.heroname  = raw_input(str("What's your name? >  "))
+
+        self.hero       = (self.heroname, health, attack)
+
+        self.intro()
+        
+    def intro(self):
+        
+        # Opening Bill Gates dialouge. Will definitely be changed later.
+        print billgates1 % (self.heroname, self.heroname, self.heroname)
+
+        raw_input("\nWhat do you think of that? > ")
+    
+        print "\nOkay then, if you want to do it the hard way."
+        print "\nWelcome to Hell %s." % self.heroname
+        
+        #time.sleep()
+        os.system('cls')
+        pass
+        #self.splash()
+        
+    #def splash(self):
+        # Splash stuff. May change splash time to 10 and adjust spacing.
+        #print splash
+        #splashTime = 10
+        #print "This splash will end in: ",
+        #while range (0, splashTime):
+            #print str(splashTime) + ' ',
+            #splashTime -= 1
+            #time.sleep(1)      
+            
+class Combat(object):
+
+    def __init__(self, Start, floor, enemyname):
+        
+        #self.hero         = Start.hero
+        self.enemyname    = enemyname
+        self.floor        = floor
+        
+    def spawn(self, enemyname):
+        
+        enemies         = {'Reanimated Keyboard' : (2,1),
+                           'Wire Basillisk' : (3,2),
+                           'Desk Jockey' : (5,1)}
+        
+        enemyhealth     = enemies[enemyname][0]
+        enemyattack     = enemies[enemyname][1]
+        enemy           = (enemyname, enemyhealth, enemyattack)
+        
+        return enemy
+    
+    def prompt(self, hero, enemy):
+
+        enemyname       = enemy[0]
+        
+        os.system('cls')
+        print "You're being attacked by a %s!\n" % enemyname
+    
+        command = raw_input(">  ")
+        if command == "help" or command == "h":
+            print combathelp
+            self.prompt(self, hero, enemy)
+        elif command == 'stats' or command == 's':
+            self.stats(self, hero, enemy)
+            self.prompt(self, hero, enemy)
+        elif command == "attack" or command == 'a':
+            pass
+    
+    def stats(self, hero, enemy):
+        
+        enemyname       = enemy[0]
+        enemyhealth     = enemy[1]
+        enemyattack     = enemy[2]
+        
+        heroname        = hero[0]
+        herohealth      = hero[1]
+        heroattack      = hero[2]
+        
+        print combatstats % (enemyname, heroname, enemyhealth, herohealth,
+                                 enemyattack, heroattack)
 
 def prompter(floor):
     
@@ -134,6 +199,16 @@ def addinv(inventory, item):
 # survey statments. These WILL be added to and may eventaully have
 # their own file.
 
+commands    = ['help', 'h', 'survey', 's', 'look', 'l', 'grab', 'g', 'inv',
+            'i']
+
+inventory   = [] 
+
+floor   =   0
+health  =   10
+attack  =   2
+enemyname = 'Desk Jockey'
+
 billgates1      = """
 Well hello there, %s. I've been waiting for you - watching you, for
 a while now %s. You may be wondering where this voice is coming from.
@@ -155,6 +230,25 @@ This game is completely free of charge, unlike most Microsoft
 products. All proceeds will be generously donated to the Bill
 and Melinda Gates foundation.\n"""
 
+combathelp      = """
++ help (h)\t: Shows this menu.
+\t\t  >  help
+
++ stats (s)\t: Shows your stats and the enemy's stats.
+\t\t  >  stats
+
++ attack (a)\t: Attack the enemy.
+\t\t  >  attack
+
+You have a chance to dodge after you attack the enemy! Press 'd' to dodge!
+"""
+
+combatstats     = """
+Name:\t %s \t %s
+Health:\t %r \t %r
+Attack:\t %r \t %r
+"""
+
 helpmenu        = """
 You can type the full command or letter abbreviation.
 Examples of use are below the command.
@@ -174,6 +268,7 @@ Examples of use are below the command.
 + inv (i)\t: View inventory screen.
 \t\t  >  inv
 """
+
 survey1         = """
  You're surrounded by towering onyx pillars rising high into the
 ceiling of a technological palace. There is a welcome DESK without an

@@ -1,18 +1,8 @@
 # Need to implement grab and inv
-
-from billgatesdef import *
+from billgatesdef import Start, Combat, os
 
 os.system('cls')
 
-floor   =   0
-item    =   0
-health  =   10
-
-hero_name = raw_input("What is your name? > ")
-
-if floor == 0:
-    gamestart(hero_name, floor)
-    floor += 1
-    prompter(floor)
-else:
-    prompter(floor)    
+s = Start()
+floor = 1
+c = Combat(Start, floor, 'Desk Jockey')
