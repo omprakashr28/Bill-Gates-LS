@@ -35,7 +35,7 @@ class Start():
         print "\nWelcome to Hell %s." % self.heroname
         
         time.sleep(4)
-        os.system('clear')
+        os.system('cls')
         self.splash()
         
     def splash(self):
