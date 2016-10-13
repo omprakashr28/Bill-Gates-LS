@@ -1,8 +1,7 @@
-# Need to implement grab and inv
-from billgatesdef import Start, Combat, os
+from billgateslsdef import Start, os, Combat
 
-os.system('cls')
+os.system('clear')
 
-s = Start()
+Start()
 floor = 1
-c = Combat(Start, floor, 'Desk Jockey')
+Combat(floor, 'Desk Jockey')
