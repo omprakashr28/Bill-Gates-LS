@@ -1,6 +1,6 @@
 from billgateslsdef import Start, os, Combat
 
-os.system('clear')
+os.system('cls')
 
 Start()
 floor = 1
