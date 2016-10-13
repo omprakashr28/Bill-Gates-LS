@@ -10,6 +10,7 @@ inventory   = []
 
 enemyname = 'Desk Jockey'
 
+
 class Start():
     
     def __init__(self):
@@ -21,7 +22,7 @@ class Start():
 
         self.hero       = (self.heroname, health, attack)
 
-        self.intro()
+        #self.intro()
         
     def intro(self):
         
@@ -33,28 +34,34 @@ class Start():
         print "\nOkay then, if you want to do it the hard way."
         print "\nWelcome to Hell %s." % self.heroname
         
-        #time.sleep()
-        os.system('cls')
-        pass
-        #self.splash()
+        time.sleep(4)
+        os.system('clear')
+        self.splash()
         
-    #def splash(self):
-        # Splash stuff. May change splash time to 10 and adjust spacing.
-        #print splash
-        #splashTime = 10
-        #print "This splash will end in: ",
-        #while range (0, splashTime):
-            #print str(splashTime) + ' ',
-            #splashTime -= 1
-            #time.sleep(1)      
+    def splash(self):
+      
+        #Splash stuff. May change splash time to 10 and adjust spacing.
+        print splash
+        splashTime = 10
+        print "This splash will end in: ",
+        while range (0, splashTime):
+            print str(splashTime) + ' ',
+            splashTime -= 1
+            time.sleep(1)      
             
 class Combat(object):
 
-    def __init__(self, Start, floor, enemyname):
+    hero        = Start().hero
+    heroname    = Start().hero[0]
+    herohealth  = Start().hero[1]
+    heroattack  = Start().hero[2]
+    
+    def __init__(self, floor, enemyname, s):
         
-        #self.hero         = Start.hero
         self.enemyname    = enemyname
         self.floor        = floor
+        
+        self.spawn(enemyname)
         
     def spawn(self, enemyname):
         
@@ -62,38 +69,34 @@ class Combat(object):
                            'Wire Basillisk' : (3,2),
                            'Desk Jockey' : (5,1)}
         
-        enemyhealth     = enemies[enemyname][0]
-        enemyattack     = enemies[enemyname][1]
-        enemy           = (enemyname, enemyhealth, enemyattack)
+        self.enemyhealth     = enemies[enemyname][0]
+        self.enemyattack     = enemies[enemyname][1]
+        #self.enemy           = (enemyname, enemyhealth, enemyattack)
         
-        return enemy
+        os.system('clear')
+        self.prompt(Start().enemy)
     
-    def prompt(self, hero, enemy):
+    def prompt(self, enemy):
 
         enemyname       = enemy[0]
         
-        os.system('cls')
         print "You're being attacked by a %s!\n" % enemyname
     
         command = raw_input(">  ")
         if command == "help" or command == "h":
             print combathelp
-            self.prompt(self, hero, enemy)
+            self.prompt(enemy)
         elif command == 'stats' or command == 's':
-            self.stats(self, hero, enemy)
-            self.prompt(self, hero, enemy)
+            self.stats(enemy)
+            self.prompt(enemy)
         elif command == "attack" or command == 'a':
             pass
     
-    def stats(self, hero, enemy):
+    def stats(self, enemy):
         
-        enemyname       = enemy[0]
-        enemyhealth     = enemy[1]
-        enemyattack     = enemy[2]
-        
-        heroname        = hero[0]
-        herohealth      = hero[1]
-        heroattack      = hero[2]
+        self.enemyname
+        self.enemyhealth
+        self.enemyattack
         
         print combatstats % (enemyname, heroname, enemyhealth, herohealth,
                                  enemyattack, heroattack)
@@ -194,6 +197,7 @@ def grab(floor, item):
 
 def addinv(inventory, item):
         inventory.append(item)
+
 
 # Below are variable definitions for the look statmeents and 
 # survey statments. These WILL be added to and may eventaully have
