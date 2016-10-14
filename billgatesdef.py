@@ -22,6 +22,9 @@ class Start():
 
         self.hero       = (self.heroname, health, attack)
 
+        self.floor = 0 
+        
+        
         self.intro()
         
     def intro(self):
@@ -35,7 +38,8 @@ class Start():
         print "\nWelcome to Hell %s." % self.heroname
         
         time.sleep(2)
-        os.system('cls')
+        self.floor = 1
+        os.system('clear')
         #self.splash()
         
     def splash(self):
@@ -46,8 +50,168 @@ class Start():
         while range (0, splashTime):
             print str(splashTime) + ' ',
             splashTime -= 1
-            time.sleep(1)      
+            time.sleep(1)
+                 
+class Prompter():
+
+    def __init__(self, floor, c, s):
+        
+        self.floor = s.floor
+        self.dooropen = False
+        
+        self.commands    = ['help', 'h', 'survey', 's', 'look', 'l', 'grab', 
+                            'g', 'inv', 'i', 'use', 'u']
+        
+        self.item   = ''
+        self.item2  = ''
+        
+        self.inventory   = []
+        
+        self.health      = c.herohealth
+        self.attack      = c.heroattack
+        
+        self.terminal()
+        
+    def terminal(self):
+
+        self.prompt_pass = (raw_input('\n>  ').split())
+        
+        if len(self.prompt_pass) == 0:
+            print "\nTry entering a command."
+            self.terminal()
             
+        # Defines command and item variables.
+        self.command = self.prompt_pass[0]
+        
+        if len(self.prompt_pass) == 1:
+            pass
+        elif len(self.prompt_pass) >= 2:
+            self.item   = self.prompt_pass[1]
+        elif len(self.prompt_pass) == 3:
+            self.item2  = self.prompt_pass[2]
+        else:
+            print "Command not recognized."
+            self.terminal()
+        
+        self.redirect()
+        
+    def redirect(self):
+        
+        if (self.command == self.commands[0] or
+            self.command == self.commands[1]):
+            
+            print helpmenu
+            self.terminal()
+    
+        # survey and s ; basically done.
+        elif (self.command == self.commands[2] or
+             self.command == self.commands[3]):
+            
+            self.survey()
+            self.terminal()
+        
+        # look and l
+        elif (self.commands[4] in self.command or
+             self.command == self.commands[5]):
+            
+            if len(self.prompt_pass) == 1:
+                print "\nWhat item are you looking at?"
+                self.terminal()
+            else:
+                self.look()
+                self.terminal()
+        
+        # grab and g
+        elif (self.commands[6] in self.command or
+             self.command == self.commands[7]):
+            
+            if len(self.prompt_pass) == 1:
+                print "\nWhat item are you grabbing?"
+                self.terminal()
+            else:
+                self.grab()
+                self.terminal()
+        
+        # inventory and i FIX INV REDUNDENCIES
+        # same as stated with help menu.
+        elif (self.command == self.commands[8] or
+             self.command == self.commands[9]):
+            
+            self.inventorygui()
+            self.terminal()
+         
+        elif (self.command == self.commands[10] or
+              self.command == self.commands[11]):
+          
+            self.use()
+            #self.terminal()
+        
+        else:
+            print "Invalid command."
+            self.terminal()
+            
+    def survey(self):
+        
+        if self.floor == 1:
+            print survey1
+        else:
+            self.terminal()
+            
+    def look(self):
+        # Has to be an easier way to organize these rather than
+        # the nesting.
+        if self.floor == 1:
+            if self.item == "DESK":
+                print look1desk
+                self.terminal()
+            elif self.item == "FIRES":
+                print look1fires
+            elif self.item == "DOOR":
+                if self.dooropen == False:
+                    print look1door0
+                    self.terminal()
+                else:
+                    print "It's a trap!"
+                    Combat.spawn('Desk Jockey') 
+                    print "The door is opened!"
+            
+    def grab(self):
+        
+        if self.floor == 1:
+            if self.item == 'KEY':
+                self.inventory.append(self.item)
+                print "You grab the %s." % self.item
+            else:
+                print "\nYour hand slips."
+            
+    def inventorygui(self):
+      
+        self.invcount = 0
+        
+        print "Your stats:"
+        print "Health:\t %r" % self.health
+        print "Attack:\t %r" % self.attack
+        
+        print "\nYour inventory:"
+        for item in self.inventory:
+            print (str(self.invcount + 1) + '.\t' + self.inventory[self.invcount])
+            
+        if len(self.inventory) == 0:
+            print "You have no items in your inventory."
+        else:
+            pass
+
+    def use(self):
+        
+        if self.floor == 1 and self.item == 'KEY' and self.item2 == 'DOOR':
+            self.dooropen == True
+            self.item = 'DOOR'
+            self.look()
+        else:
+            "You can't use that."
+            self.terminal()
+            
+
 class Combat():
 
     def __init__(self, floor, enemyname, s):
@@ -63,8 +227,6 @@ class Combat():
         self.enemyhealth = 0
         self.enemyattack = 0
         
-        self.spawn
-        
     def spawn(self):
 
         enemies         = {'Reanimated Keyboard' : (2,1),
@@ -74,7 +236,7 @@ class Combat():
         self.enemyhealth     = enemies[enemyname][0]
         self.enemyattack     = enemies[enemyname][1]
         
-        #os.system('cls')
+        #os.system('clear')
         
         self.prompt()
     
@@ -114,122 +276,9 @@ class Combat():
                 
         else:
             print "You have slayed a %s! 0" % self.enemyname
-        
-class Prompter():
-
-    def __init__(self, floor):
-        
-        self.floor = floor
-        self.commands    = ['help', 'h', 'survey', 's', 'look', 'l', 'grab', 
-                            'g', 'inv', 'i']
-        
-        self.inventory   = []
-        
-        self.interpreter()
-        
-    def interpreter(self):
-
-        self.prompt_pass = (raw_input('\n>  ').split())
-        
-        if len(self.prompt_pass) == 0:
-            print "\nTry entering a command."
-            self.interpreter()
-            
-        # Defines command and item variables.
-        self.command = self.prompt_pass[0]
-        
-        if len(self.prompt_pass) == 1:
-            pass
-        elif len(self.prompt_pass) == 2:
-            self.item = self.prompt_pass[1]
-        else:
-            print "Command not recognized."
-            self.interpreter()
-        
-        self.redirect()
-        
-    def redirect(self):
-        
-        if (self.command == self.commands[0] or
-            self.command == self.commands[1]):
-            
-            print helpmenu
-            self.interpreter()
-    
-        # survey and s ; basically done.
-        elif (self.command == self.commands[2] or
-             self.command == self.commands[3]):
-            
-            self.survey()
-            self.interpreter()
-        
-        # look and l
-        elif (self.commands[4] in self.command or
-             self.command == self.commands[5]):
-            
-            if len(self.prompt_pass) == 1:
-                print "\nWhat item are you looking at?"
-                self.interpreter()
-            else:
-                self.look()
-                self.interpreter()
-        
-        # grab and g
-        elif (self.commands[6] in self.command or
-             self.command == self.commands[7]):
-            
-            if len(self.prompt_pass) == 1:
-                print "\nWhat item are you grabbing?"
-                self.interpreter()
-            else:
-                self.grab()
-                self.interpreter()
-        
-        # inventory and i FIX INV REDUNDENCIES
-        # same as stated with help menu.
-        elif (self.command == self.commands[8] or
-             self.command == self.commands[9]):
-            
-            print self.inventory
-            self.interpreter()
-        
-        else:
-            print "Invalid command."
-            
-    def survey(self):
-        
-        if self.floor == 1:
-            print survey1
-        else:
-            self.interpreter()
-            
-    def look(self):
-        # Has to be an easier way to organize these rather than
-        # the nesting.
-        if self.floor == 1:
-            if self.item == "DESK":
-                print look1desk
-                self.interpreter()
-            elif self.item == "FIRES":
-                print look1fires
-            elif self.item == "DOOR":
-                #if dooropen == false:
-                print look1door0
-                self.interpreter()
-                #elif open == true:
-                #else:
-                    #pass
-                pass
-            
-    def grab(self):
-        
-        if self.floor == 1:
-            if self.item == 'KEY':
-                self.inventory.append(self.item)
-                print "You grab the %s." % self.item
-            else:
-                print "\nYour hand slips."   
-
+   
+                
+                
 # Below are variable definitions for the look statmeents and 
 # survey statments. These WILL be added to and may eventaully have
 # their own file.
