@@ -1,7 +1,13 @@
-from billgateslsdef import Start, os, Combat
+from billgatesdef import *
 
 os.system('cls')
-
-Start()
 floor = 1
-Combat(floor, 'Desk Jockey')
+
+s = Start()
+os.system('cls')
+#p = Prompter(floor)
+c = Combat(floor, 'Wire Basillisk', s)
+
+
+#cb = Combat(floor, enemyname, s)
+#cb.spawn(enemyname)
