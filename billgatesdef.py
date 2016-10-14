@@ -22,7 +22,7 @@ class Start():
 
         self.hero       = (self.heroname, health, attack)
 
-        #self.intro()
+        self.intro()
         
     def intro(self):
         
@@ -34,12 +34,11 @@ class Start():
         print "\nOkay then, if you want to do it the hard way."
         print "\nWelcome to Hell %s." % self.heroname
         
-        time.sleep(4)
+        time.sleep(2)
         os.system('cls')
-        self.splash()
+        #self.splash()
         
     def splash(self):
-      
         #Splash stuff. May change splash time to 10 and adjust spacing.
         print splash
         splashTime = 10
@@ -49,155 +48,187 @@ class Start():
             splashTime -= 1
             time.sleep(1)      
             
-class Combat(object):
+class Combat():
 
-    hero        = Start().hero
-    heroname    = Start().hero[0]
-    herohealth  = Start().hero[1]
-    heroattack  = Start().hero[2]
-    
     def __init__(self, floor, enemyname, s):
         
-        self.enemyname    = enemyname
         self.floor        = floor
         
-        self.spawn(enemyname)
+        self.hero        = s.hero
+        self.heroname    = s.hero[0]
+        self.herohealth  = s.hero[1]
+        self.heroattack  = s.hero[2]
         
-    def spawn(self, enemyname):
+        self.enemyname    = enemyname
+        self.enemyhealth = 0
+        self.enemyattack = 0
         
+        self.spawn
+        
+    def spawn(self):
+
         enemies         = {'Reanimated Keyboard' : (2,1),
                            'Wire Basillisk' : (3,2),
                            'Desk Jockey' : (5,1)}
         
         self.enemyhealth     = enemies[enemyname][0]
         self.enemyattack     = enemies[enemyname][1]
-        #self.enemy           = (enemyname, enemyhealth, enemyattack)
         
-        os.system('clear')
-        self.prompt(Start().enemy)
+        #os.system('cls')
+        
+        self.prompt()
     
-    def prompt(self, enemy):
-
-        enemyname       = enemy[0]
+    def prompt(self):
         
-        print "You're being attacked by a %s!\n" % enemyname
+        print "You're being attacked by a %s!\n" % self.enemyname
     
         command = raw_input(">  ")
         if command == "help" or command == "h":
             print combathelp
-            self.prompt(enemy)
+            self.prompt()
         elif command == 'stats' or command == 's':
-            self.stats(enemy)
-            self.prompt(enemy)
+            self.stats()
+            self.prompt()
         elif command == "attack" or command == 'a':
             pass
     
-    def stats(self, enemy):
+    def stats(self):
         
-        self.enemyname
-        self.enemyhealth
-        self.enemyattack
+        print combatstats % (self.enemyname, self.heroname, self.enemyhealth, 
+                        self.herohealth, self.enemyattack, self.heroattack)
+    
+    def attack(self):
         
-        print combatstats % (enemyname, heroname, enemyhealth, herohealth,
-                                 enemyattack, heroattack)
-
-def prompter(floor):
-    
-    # This is definitely one of the most complicated parts of the entire
-    # program. Think about more simplification.
-    
-    # Takes user input and splits it.
-    prompt_pass = (raw_input('\n>  ').split())
-    if len(prompt_pass) == 0:
-        print "\nTry entering a command."
-        prompter(floor)
-    
-    # Defines command and item variables.
-    command = prompt_pass[0]
-    
-    if len(prompt_pass) == 1:
-        pass
-    elif len(prompt_pass) == 2:
-        item = prompt_pass[1]
-    else:
-        print "Command not recognized."
-        prompter(floor)
-    
-    # help and h
-    # define a function later w/ more interactive help.
-    if command == commands[0] or command == commands[1]:
-        print helpmenu
-        prompter(floor)
-    
-    # survey and s ; basically done.
-    elif command == commands[2] or command == commands[3]:
-        survey(floor)
-        prompter(floor)
-    
-    # look and l
-    elif commands[4] in command or command == commands[5]:
-        if len(prompt_pass) == 1:
-            print "\nWhat item are you looking at?"
-            prompter(floor)
+        if self.enemyhealth != 0:
+            self.enemyhealth -= self.heroattack
+            print "You hit the  %s  for  %r  HP! It now has  %r  HP." % (
+                self.enemyname, self.heroattack, self.enemyhealth)
+            
+            if self.enemyhealth == 0:
+                print "You have slayed a %s! 1" % self.enemyname
+            
+            else:
+                self.herohealth -= self.enemyattack
+                print "The %s hits you for %r HP! You now have %r HP." % (
+                    self.enemyname, self.enemyattack, self.herohealth)
+                
         else:
-            look(floor, item)
-            prompter(floor)
-    
-    # grab and g
-    elif commands[6] in command or command == commands[7]:
-        if len(prompt_pass) == 1:
-            print "\nWhat item are you grabbing?"
-            prompter(floor)
-        else:
-            grab(floor, item)
-            prompter(floor)
-    
-    # inventory and i FIX INV REDUNDENCIES
-    # same as stated with help menu.
-    elif command == commands[8] or command == commands[9]:
-        print inventory
-        prompter(floor)
+            print "You have slayed a %s! 0" % self.enemyname
         
-    else:
-        print "Command not recognized."
-        prompter(floor)
+class Prompter():
 
-def survey(floor):
-    # will add more if statements for other floors.
-    if floor == 1:
-        print survey1
-    else:
-        pass
+    def __init__(self, floor):
+        
+        self.floor = floor
+        self.commands    = ['help', 'h', 'survey', 's', 'look', 'l', 'grab', 
+                            'g', 'inv', 'i']
+        
+        self.inventory   = []
+        
+        self.interpreter()
+        
+    def interpreter(self):
 
-def look(floor, item):
-    # Has to be an easier way to organize these rather than
-    # the nesting.
-    if floor == 1:
-        if item == "DESK":
-            print look1desk
-            prompter(1)
-        elif item == "FIRES":
-            print look1fires
-        elif item == "DOOR":
-            #if dooropen == false:
-            print look1door0
-            prompter(1)
-            #elif open == true:
-            #else:
-                #pass
+        self.prompt_pass = (raw_input('\n>  ').split())
+        
+        if len(self.prompt_pass) == 0:
+            print "\nTry entering a command."
+            self.interpreter()
+            
+        # Defines command and item variables.
+        self.command = self.prompt_pass[0]
+        
+        if len(self.prompt_pass) == 1:
             pass
-
-def grab(floor, item):
-    if floor == 1:
-        if item == 'KEY':
-            addinv(inventory, 'KEY')
-            print "You grab the %s." % item
+        elif len(self.prompt_pass) == 2:
+            self.item = self.prompt_pass[1]
         else:
-            print "\nYour hand slips."   
-
-def addinv(inventory, item):
-        inventory.append(item)
-
+            print "Command not recognized."
+            self.interpreter()
+        
+        self.redirect()
+        
+    def redirect(self):
+        
+        if (self.command == self.commands[0] or
+            self.command == self.commands[1]):
+            
+            print helpmenu
+            self.interpreter()
+    
+        # survey and s ; basically done.
+        elif (self.command == self.commands[2] or
+             self.command == self.commands[3]):
+            
+            self.survey()
+            self.interpreter()
+        
+        # look and l
+        elif (self.commands[4] in self.command or
+             self.command == self.commands[5]):
+            
+            if len(self.prompt_pass) == 1:
+                print "\nWhat item are you looking at?"
+                self.interpreter()
+            else:
+                self.look()
+                self.interpreter()
+        
+        # grab and g
+        elif (self.commands[6] in self.command or
+             self.command == self.commands[7]):
+            
+            if len(self.prompt_pass) == 1:
+                print "\nWhat item are you grabbing?"
+                self.interpreter()
+            else:
+                self.grab()
+                self.interpreter()
+        
+        # inventory and i FIX INV REDUNDENCIES
+        # same as stated with help menu.
+        elif (self.command == self.commands[8] or
+             self.command == self.commands[9]):
+            
+            print self.inventory
+            self.interpreter()
+        
+        else:
+            print "Invalid command."
+            
+    def survey(self):
+        
+        if self.floor == 1:
+            print survey1
+        else:
+            self.interpreter()
+            
+    def look(self):
+        # Has to be an easier way to organize these rather than
+        # the nesting.
+        if self.floor == 1:
+            if self.item == "DESK":
+                print look1desk
+                self.interpreter()
+            elif self.item == "FIRES":
+                print look1fires
+            elif self.item == "DOOR":
+                #if dooropen == false:
+                print look1door0
+                self.interpreter()
+                #elif open == true:
+                #else:
+                    #pass
+                pass
+            
+    def grab(self):
+        
+        if self.floor == 1:
+            if self.item == 'KEY':
+                self.inventory.append(self.item)
+                print "You grab the %s." % self.item
+            else:
+                print "\nYour hand slips."   
 
 # Below are variable definitions for the look statmeents and 
 # survey statments. These WILL be added to and may eventaully have
@@ -249,8 +280,8 @@ You have a chance to dodge after you attack the enemy! Press 'd' to dodge!
 
 combatstats     = """
 Name:\t %s \t %s
-Health:\t %r \t %r
-Attack:\t %r \t %r
+Health:\t\t %r \t %r
+Attack:\t\t %r \t %r
 """
 
 helpmenu        = """
@@ -282,7 +313,7 @@ scattered FIRES burning on the tile flooring provide any light to the
 room. On the wall across the room from you there is a DOOR marked 
 "Staff Only." There are a few BODIES on the floor."""
 
-look1desk    	= """
+look1desk        = """
 The desk is cluttered with a few tattered papers on top. After you rummage
 around it like a good detective, you find a KEY in one of the open drawers.
 Under the desk you find a damaged picture of Bill Gates. The frame appears very
@@ -290,12 +321,12 @@ ornate and possible gold, but the glass is shattered. On top of the desk there
 is an apparently (apparently because of the bullet holes in it) non functional
 computer hooked up to a seemingly punched monitor."""
 
-look1fires   	= """
+look1fires       = """
 There are many fires blazing around the room. Some of them are burning BODIES
 that fill the room with an awful stench. Some of the fires however are,
 somewhat curiously, localized to ELECTRONICS."""
 
-look1door0   	= """
+look1door0       = """
 The door says "Staff Only" and is locked. Maybe there is a key around!"""
 
 look1door1      = "Please write an look statement for unlocked door."
