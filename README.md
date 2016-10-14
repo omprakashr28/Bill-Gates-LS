@@ -3,9 +3,4 @@
 Need to fix infinite inventory.
 
 Stuff to implement:
-  + enemies
-  + damage
-  + potions
-  + weapons
-  + inv screen
-      - With health displayed and prettier inv.
+  + use command and func
